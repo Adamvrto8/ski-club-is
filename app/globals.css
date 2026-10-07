@@ -1,0 +1,475 @@
+/* Frosty paleta, čierny text, pastelové družstvá. */
+:root {
+  color-scheme: light;
+  --frost: #def3ed;
+  --frost-soft: #f2fbf8;
+  --frost-line: #cde5dd;
+  --ink: #17211e;
+  --ink-soft: #5c7469;
+  --green: #1f5a49;
+  --green-dark: #174537;
+  --danger: #a1333e;
+  --danger-soft: #fce5e7;
+  --warn: #886000;
+  --warn-soft: #fff3d8;
+  --ok: #227451;
+  --ok-soft: #e0f4e9;
+  --surface: #ffffff;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--frost-soft);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  line-height: 1.45;
+  /* Dlhé reťazce (e-maily, cesty k súborom, IBAN) nesmú roztiahnuť stránku do šírky. */
+  overflow-wrap: break-word;
+}
+
+img { max-width: 100%; height: auto; }
+
+/* Mriežka aj flex položky sa štandardne nezmenšia pod obsah — to spôsobuje pretekanie. */
+.app-layout > *, .form-grid > *, .summary-grid > *, .panel-grid > * { min-width: 0; }
+
+a { color: inherit; }
+button, input, select, textarea { font: inherit; }
+
+input, select, textarea {
+  border: 1px solid var(--frost-line);
+  border-radius: 8px;
+  min-height: 38px;
+  padding: 8px 10px;
+  background: var(--surface);
+  color: var(--ink);
+  width: 100%;
+}
+input[type="checkbox"] { width: auto; min-height: auto; accent-color: var(--green); }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: var(--green);
+  color: #fff;
+  font-weight: 700;
+}
+button:hover:not(:disabled) { background: var(--green-dark); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.secondary { background: var(--surface); color: var(--green); border: 1px solid #a9cfc0; }
+button.secondary:hover:not(:disabled) { background: var(--frost); }
+.danger-button { background: var(--surface); color: var(--danger); border: 1px solid #efc2c7; }
+.danger-button:hover:not(:disabled) { background: var(--danger-soft); }
+.icon-button { background: transparent; color: #386457; padding: 5px 9px; }
+.icon-button:hover:not(:disabled) { background: var(--frost); }
+
+/* ---------- Layout ---------- */
+.app-layout { min-height: 100vh; display: grid; grid-template-columns: 276px minmax(0, 1fr); }
+.app-content { min-width: 0; padding: 26px 32px 56px; }
+
+.sidebar {
+  background: #fbfffd;
+  border-right: 1px solid var(--frost-line);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-brand {
+  display: flex; gap: 10px; align-items: center;
+  padding: 16px; border-bottom: 1px solid var(--frost-line);
+}
+.sidebar-brand img { width: 54px; height: 52px; object-fit: contain; flex: none; }
+/* Bez min-width:0 by názov klubu odmietol zalomiť a odtlačil by tlačidlo mimo obrazovky. */
+.sidebar-brand > div { min-width: 0; }
+.sidebar-brand strong { font-size: .87rem; line-height: 1.25; }
+.sidebar-brand small { display: block; color: var(--ink-soft); margin-top: 4px; }
+.sidebar-footer { padding: 14px; border-top: 1px solid var(--frost-line); margin-top: auto; }
+.sidebar-footer button { width: 100%; }
+/* Odhlásenie v hlavičke je len pre úzke obrazovky; na širokej ho nahrádza pätička panela. */
+.brand-signout { display: none; }
+
+.nav-group { padding: 16px 9px 0; }
+.nav-group p { color: #779087; letter-spacing: .08em; font-size: .71rem; font-weight: 700; margin: 0 8px 6px; }
+.nav-group a {
+  text-decoration: none; color: #49665b; display: flex; gap: 12px; align-items: center;
+  padding: 9px 10px; border-radius: 7px; margin: 2px 0; font-weight: 600; font-size: .94rem;
+}
+.nav-group a span { width: 17px; text-align: center; color: #527d70; }
+.nav-group a:hover, .nav-group a.active { background: #cceee6; color: #164b3d; }
+
+.demo-banner {
+  background: var(--warn-soft); color: var(--warn); border: 1px solid #f0dcae;
+  border-radius: 10px; padding: 10px 14px; margin: 0 0 18px; font-size: .9rem;
+}
+/* `overflow-wrap` samo nestačí — bez `break-word` by dlhý názov súboru rozbil layout. */
+.demo-banner code {
+  background: #fff; padding: 1px 5px; border-radius: 4px;
+  word-break: break-all;
+}
+
+.install-banner {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  background: var(--frost); border: 1px solid var(--frost-line);
+  border-radius: 10px; padding: 12px 14px; margin: 0 0 18px; font-size: .92rem;
+}
+.install-banner span { flex: 1; min-width: 200px; }
+
+.push-panel { display: grid; gap: 12px; }
+.push-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.push-actions p { margin: 0; margin-right: auto; }
+
+/* ---------- Hlavička stránky ---------- */
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 18px;
+  padding: 4px 0 18px; border-bottom: 1px solid var(--frost-line); flex-wrap: wrap;
+}
+.page-header h1 { margin: 0; font-size: 1.85rem; }
+.eyebrow { font-size: .72rem; letter-spacing: .13em; font-weight: 700; color: #52766a; margin: 0 0 4px; }
+.header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.muted { color: var(--ink-soft); }
+.button-link {
+  display: inline-block; padding: 10px 14px; border-radius: 8px;
+  color: #fff; background: var(--green); text-decoration: none; font-weight: 700;
+}
+.button-link:hover { background: var(--green-dark); }
+.secondary-link {
+  display: inline-block; padding: 9px 13px; border-radius: 8px; text-decoration: none;
+  background: var(--surface); color: var(--green); border: 1px solid #a9cfc0; font-weight: 700;
+}
+.text-link { color: #275f4f; font-weight: 700; text-decoration: none; }
+.text-link:hover { text-decoration: underline; }
+button.text-link { background: none; border: 0; padding: 0; font: inherit; cursor: pointer; }
+.inline-links { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* ---------- Nástroje a zoznamy ---------- */
+.toolbar {
+  background: var(--frost); border-radius: var(--radius); padding: 14px;
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 20px 0 14px;
+}
+.toolbar input { min-width: 230px; flex: 1; }
+.toolbar select { width: auto; }
+.toolbar button { background: var(--surface); color: var(--green); border: 1px solid #a9cfc0; }
+.toolbar .implicit-submit { position: absolute; width: 1px; height: 1px; padding: 0; border: 0; overflow: hidden; clip-path: inset(50%); }
+
+/* Okno s filtrami (natívny popover) — v strede obrazovky, na telefóne takmer celá šírka. */
+.filter-popover {
+  width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 48px); overflow-y: auto;
+  margin: auto; padding: 20px 22px; border: 1px solid var(--frost-line); border-radius: var(--radius);
+  background: var(--surface); color: var(--ink); box-shadow: 0 18px 48px rgba(23, 33, 30, .22);
+}
+.filter-popover::backdrop { background: rgba(23, 33, 30, .28); }
+.filter-popover h2 { margin: 0 0 14px; font-size: 1.15rem; }
+.toolbar .filter-popover input, .toolbar .filter-popover select { min-width: 0; width: 100%; flex: none; }
+.toolbar .filter-popover button.primary { background: var(--green); color: #fff; border-color: var(--green); }
+.toolbar .filter-popover button.primary:hover { background: var(--green-dark); }
+.filter-popover .form-actions { flex-wrap: wrap; }
+.filter-popover .form-actions .text-link { margin-right: auto; }
+
+.list-actions { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+.list-actions p { margin: 8px 0; }
+
+.notice { padding: 11px 14px; border-radius: 9px; background: var(--ok-soft); color: var(--green); margin: 14px 0; }
+.notice.error { background: var(--danger-soft); color: #942d37; }
+
+.bulk-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin: 12px 0; color: #577269; font-size: .9rem;
+}
+.bulk-bar label { font-weight: 700; display: flex; align-items: center; gap: 7px; }
+.bulk-bar > span { margin-right: auto; }
+.bulk-bar select { width: auto; }
+
+/* ---------- Tabuľky ---------- */
+.table-wrap { overflow-x: auto; border: 1px solid #d7e7e0; border-radius: var(--radius); background: var(--surface); }
+.members { width: 100%; border-collapse: collapse; min-width: 700px; }
+.members th {
+  background: #f0f8f5; text-align: left; font-size: .77rem; color: #547168;
+  letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
+}
+.members th, .members td { padding: 12px 14px; border-bottom: 1px solid #e6f0ec; vertical-align: middle; }
+.members tr:last-child td { border-bottom: 0; }
+.members tbody tr:hover { background: #fafefc; }
+/* Miery na výstroj — čísla sa porovnávajú po stĺpci, preto vpravo a tabuľkové číslice. */
+.members td.numeric { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.invalid-row { background: #fff7f7; }
+.empty-cell { text-align: center; color: var(--ink-soft); padding: 28px !important; }
+.payments td, .payments th { white-space: nowrap; }
+.row-actions { display: flex; gap: 6px; align-items: center; }
+
+/* Pastelové družstvá */
+.team { display: inline-block; border-radius: 99px; padding: 4px 10px; font-size: .81rem; white-space: nowrap; text-decoration: none; }
+.team-skola_lyzovania { background: #dff0ff; color: #1c4c73; }
+.team-sportove_druzstvo { background: #e4f5e2; color: #2c5c27; }
+.team-pretekove_druzstvo { background: #f6e6f7; color: #6b2f72; }
+
+.chip { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 99px; font-size: .74rem; font-weight: 700; }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.neutral { background: var(--frost-soft); color: var(--ink-soft); }
+.ok { color: var(--ok); font-weight: 700; }
+.no { color: #bf5360; font-weight: 700; }
+.overdue-text { color: #b33c4a; }
+
+.payment-status { font-size: .79rem; padding: 4px 9px; border-radius: 99px; font-weight: 700; }
+.payment-status.paid { background: var(--ok-soft); color: var(--ok); }
+.payment-status.unpaid { background: var(--warn-soft); color: var(--warn); }
+.payment-status.overdue { background: var(--danger-soft); color: #a22f3b; }
+
+/* ---------- Karty a formuláre ---------- */
+.form-card {
+  margin-top: 22px; background: var(--surface); border: 1px solid #d7e7e0;
+  border-radius: var(--radius); padding: 20px;
+}
+.form-card h2 { margin-top: 0; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; align-items: start; }
+.form-grid label { display: grid; gap: 5px; font-size: .89rem; font-weight: 700; }
+.form-grid .wide { grid-column: 1 / -1; }
+.date-range { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 10px; }
+.date-range legend { grid-column: 1 / -1; padding: 0; margin-bottom: 5px; font-size: .89rem; font-weight: 700; }
+.form-grid .date-range label { font-weight: 400; color: #6a8078; font-size: .79rem; }
+.check { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.field-help { font-weight: 400; color: #6a8078; font-size: .79rem; }
+.form-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; margin-top: 18px; }
+.detail-form { max-width: 920px; }
+.sensitive { border-color: #ebd7da; background: #fffafa; }
+.section-heading { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+.section-heading h2 { margin: 0 0 4px; }
+.table-section { margin-top: 26px; }
+.edit-panel { border-color: #a9cfc0; }
+
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0; }
+.summary-grid article {
+  background: var(--surface); border: 1px solid #d7e7e0; border-radius: var(--radius);
+  padding: 18px; display: grid; gap: 5px;
+}
+.summary-grid span { color: #577269; font-size: .84rem; font-weight: 700; }
+.summary-grid strong { font-size: 1.6rem; }
+.summary-grid small { color: #71877f; }
+
+.panel-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.stat-list { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 9px; }
+.stat-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+.empty-panel {
+  max-width: 740px; margin: 32px auto; background: var(--surface);
+  border: 1px solid #d7e7e0; border-radius: 16px; padding: 32px; text-align: center;
+}
+.empty-panel h2 { margin-top: 0; }
+.empty-panel p { color: #587269; }
+.planned-list { text-align: left; display: inline-block; color: var(--ink-soft); margin: 4px auto 18px; }
+.planned-list li { margin: 6px 0; }
+
+/* Výber detí */
+.member-picker { border: 1px solid var(--frost-line); border-radius: 10px; padding: 14px; margin-top: 16px; }
+.member-picker legend { font-weight: 700; padding: 0 6px; }
+.picker-search { margin-bottom: 10px; }
+.picker-actions { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.picker-list { max-height: 260px; overflow-y: auto; display: grid; gap: 6px; }
+
+.category-list { display: grid; gap: 10px; margin: 14px 0 22px; }
+.category-row { display: flex; gap: 10px; align-items: flex-end; border: 1px solid var(--frost-line); border-radius: 10px; padding: 12px; }
+.category-fields { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; flex: 1; }
+.category-fields label { display: grid; gap: 4px; font-size: .84rem; font-weight: 700; }
+.new-category { border-top: 1px dashed var(--frost-line); padding-top: 18px; }
+
+.message-box { width: 100%; font-family: Consolas, "Courier New", monospace; font-size: .88rem; }
+
+.note-cell { max-width: 280px; white-space: normal; color: var(--ink-soft); font-size: .88rem; }
+.danger-zone { margin-top: 22px; padding-top: 18px; border-top: 1px solid #ebd7da; display: flex; justify-content: flex-end; }
+
+/* Požičovňa: stavy kusov výstroja. */
+.equip-status { font-size: .79rem; padding: 4px 9px; border-radius: 99px; font-weight: 700; white-space: nowrap; }
+.equip-status.dostupne { background: var(--ok-soft); color: var(--ok); }
+.equip-status.pozicane { background: #e4ecff; color: #27488f; }
+.equip-status.v_oprave { background: var(--warn-soft); color: var(--warn); }
+.equip-status.stratene { background: var(--danger-soft); color: #a22f3b; }
+.equip-status.vyradene { background: #eceff0; color: #5c6b66; }
+.subcategory-list { margin: 12px 0 0 18px; padding-left: 14px; border-left: 2px solid var(--frost-line); display: grid; gap: 10px; }
+.new-subcategory { border: 1px dashed var(--frost-line); border-radius: 10px; padding: 12px; }
+
+/* Dochádzka: úzke stĺpce dní, meno zostáva viditeľné pri vodorovnom posune. */
+.attendance-table { min-width: 0; }
+.attendance-table .day-column { text-align: center; padding: 10px 6px; min-width: 34px; }
+.attendance-table .sticky-name { position: sticky; left: 0; background: var(--surface); white-space: nowrap; }
+.attendance-table tbody tr:hover .sticky-name { background: #fafefc; }
+
+/* ---------- Prihlásenie ---------- */
+.signin { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: var(--frost); }
+.signin-card {
+  background: var(--surface); border-radius: 18px; padding: 34px; width: min(420px, 100%);
+  border: 1px solid var(--frost-line); text-align: center;
+}
+.signin-logo { width: 96px; height: 92px; object-fit: contain; margin-bottom: 10px; }
+.signin-card h1 { margin: 2px 0 6px; font-size: 1.6rem; }
+.signin-form { display: grid; gap: 14px; text-align: left; margin-top: 22px; }
+.signin-form label { display: grid; gap: 5px; font-weight: 700; font-size: .9rem; }
+.signin-form .small { font-size: .82rem; margin: -4px 0 0; }
+/* Heslo + prepínač „Zobraziť“ na jednom riadku. */
+.password-input { display: flex; align-items: center; gap: 8px; }
+.password-input input { flex: 1; }
+.signin-alt { margin: 18px 0 0; font-size: .88rem; }
+.signin-alt a { color: var(--green); font-weight: 700; }
+.signin-divider { display: flex; align-items: center; gap: 10px; margin: 18px 0 12px; color: var(--ink-soft); font-size: .82rem; }
+.signin-divider::before, .signin-divider::after { content: ""; flex: 1; border-top: 1px solid var(--frost-line); }
+.google-button { width: 100%; }
+
+/* ---------- Tlač (potvrdenia a zoznamy) ---------- */
+.print-page { max-width: 780px; margin: 0 auto; padding: 32px 28px 60px; background: #fff; color: #000; }
+.print-toolbar { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 24px; }
+.print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 26px; }
+.print-header h1 { font-size: 1.25rem; margin: 0 0 4px; }
+.print-header p { margin: 0; font-size: .92rem; }
+.print-table { width: 100%; border-collapse: collapse; }
+.print-table th, .print-table td { border: 1px solid #333; padding: 8px 10px; text-align: left; font-size: .93rem; }
+.print-table thead th { background: #eee; }
+.print-table tfoot td { font-weight: 700; background: #f6f6f6; }
+
+.document-title { text-align: center; font-size: 1.15rem; margin: 0 0 18px; text-transform: uppercase; }
+.document-intro { margin-bottom: 20px; }
+.document-table { width: 100%; border-collapse: collapse; margin-bottom: 22px; }
+.document-table th, .document-table td { border-bottom: 1px solid #bbb; padding: 9px 6px; text-align: left; vertical-align: top; }
+.document-table th { width: 42%; font-weight: 600; }
+.document-note { font-size: .9rem; margin-bottom: 36px; }
+.document-footer { margin-top: 44px; display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; }
+.signature { text-align: center; }
+.signature-line { display: block; width: 210px; border-top: 1px solid #000; margin-bottom: 6px; }
+.signature p { margin: 0; font-size: .9rem; }
+
+/* Potvrdenie o športovej činnosti — vzhľad podľa Wordovej predlohy klubu. */
+.confirmation { font-family: "Times New Roman", Times, serif; font-size: 15px; line-height: 1.35; }
+.confirmation .print-toolbar { font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; font-size: 1rem; }
+.confirmation-header { text-align: center; margin-bottom: 44px; }
+.confirmation-header h1 { font-size: 16px; margin: 0 0 16px; }
+.confirmation-header p { font-size: 13px; font-weight: 700; margin: 0; }
+.confirmation-title { text-align: center; font-size: 17px; text-decoration: underline; text-underline-offset: 3px; margin: 0 0 34px; }
+.confirmation-fields { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+.confirmation-fields th, .confirmation-fields td { padding: 7px 0; text-align: left; vertical-align: top; font-weight: 400; }
+.confirmation-fields th { width: 58%; padding-right: 24px; }
+.confirmation-fields.roomy th, .confirmation-fields.roomy td { padding: 12px 0; }
+.confirmation-months { width: min(240px, 100%); margin: 0 auto 30px; border-collapse: collapse; border: 2px solid #000; font-size: 14px; }
+.confirmation-months th, .confirmation-months td { border: 1px solid #000; padding: 1px 6px; text-align: left; }
+.confirmation-months th:last-child, .confirmation-months td:last-child { text-align: center; width: 30%; }
+.confirmation-months thead th { background: #bfbfbf; }
+.confirmation-months tfoot td { font-weight: 700; border-top: 2px solid #000; }
+.confirmation-note { margin: 0 0 16px; }
+.confirmation-footer { margin-top: 56px; }
+.confirmation-footer > p { margin: 0 0 30px; }
+.confirmation-signature { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+.confirmation-signature p { margin: 0; }
+.confirmation-signature > div { text-align: center; min-width: 190px; margin-top: 14px; }
+.confirmation-signature .signature-line { width: 100%; margin-bottom: 4px; }
+
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .print-page { padding: 0; max-width: none; }
+  @page { margin: 18mm; }
+}
+
+/* ---------- Mobil ---------- */
+@media (max-width: 860px) {
+  .panel-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .sidebar { min-height: 0; border-right: 0; border-bottom: 1px solid var(--frost-line); }
+  .sidebar nav { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-group { padding: 6px 4px; min-width: max-content; }
+  .nav-group p { display: none; }
+  .nav-group a { display: inline-flex; white-space: nowrap; padding: 8px 10px; font-size: .9rem; }
+  .sidebar-brand { min-height: 0; padding: 12px 14px; }
+  .sidebar-brand img { width: 40px; height: 38px; }
+  .sidebar-brand strong { font-size: .8rem; }
+
+  /* Odhlásenie ide do hlavičky vpravo a pätička panela sa skryje. */
+  .sidebar-footer { display: none; }
+  .brand-signout { display: block; margin-left: auto; }
+  .brand-signout button { padding: 7px 11px; font-size: .82rem; white-space: nowrap; }
+
+  .app-content { padding: 16px 14px 40px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid .wide { grid-column: auto; }
+  .summary-grid { grid-template-columns: 1fr; gap: 10px; }
+  .summary-grid article { padding: 14px; }
+  .toolbar { padding: 12px; gap: 8px; }
+  .toolbar input, .toolbar select { min-width: 100%; width: 100%; }
+  .category-row { flex-direction: column; align-items: stretch; }
+  .category-fields { flex-direction: column; align-items: stretch; }
+  .bulk-bar { gap: 8px; }
+  .bulk-bar button { flex: 1 1 auto; }
+}
+
+/*
+ * Telefón. Na 390 px bola appka „príliš priblížená“ — nadpisy a odsadenie
+ * zaberali väčšinu obrazovky. Zmenšujeme mierku, nie čitateľnosť:
+ * text zostáva nad 14 px, aby ho iOS pri fokuse v poli sám nezväčšoval.
+ */
+@media (max-width: 480px) {
+  body { font-size: 15px; }
+  .app-content { padding: 14px 12px 36px; }
+  .page-header { padding-bottom: 14px; gap: 10px; }
+  .page-header h1 { font-size: 1.4rem; }
+  .eyebrow { font-size: .66rem; letter-spacing: .1em; }
+  .form-card { padding: 16px; margin-top: 16px; }
+  .form-card h2, .section-heading h2 { font-size: 1.1rem; }
+  .summary-grid strong { font-size: 1.35rem; }
+  .members th, .members td { padding: 10px; }
+  /* 16 px v poliach bráni tomu, aby Safari po ťuknutí priblížil celú stránku. */
+  input, select, textarea { font-size: 16px; }
+  .header-actions { width: 100%; }
+  .header-actions a { flex: 1; text-align: center; }
+  .list-actions { gap: 8px; }
+  .empty-panel { padding: 22px 16px; margin: 20px auto; }
+  .print-page { padding: 16px 12px 40px; }
+  .sidebar-brand { gap: 8px; padding: 10px 12px; }
+  .brand-signout button { padding: 6px 9px; font-size: .78rem; }
+}
+
+/* Požičovňa: skupiny inventára (Prenájom / Predaj / Sklad) a bloky podľa kategórie. */
+.purpose-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 18px 0 4px; border-bottom: 1px solid var(--frost-line); }
+.purpose-tabs a {
+  padding: 10px 16px; border-radius: 10px 10px 0 0; text-decoration: none; color: var(--ink-soft);
+  font-weight: 700; border: 1px solid transparent; border-bottom: 0; margin-bottom: -1px;
+}
+.purpose-tabs a span { font-weight: 600; font-size: .8rem; margin-left: 4px; color: var(--ink-soft); }
+.purpose-tabs a.active { background: var(--frost-soft); color: var(--ink); border-color: var(--frost-line); }
+.equipment-group { border: 1px solid var(--frost-line); border-radius: 12px; margin: 10px 0; background: #fff; }
+.equipment-group > summary {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 13px 16px; cursor: pointer; list-style: none;
+}
+.equipment-group > summary::-webkit-details-marker { display: none; }
+.equipment-group > summary::before { content: "▸"; color: var(--ink-soft); transition: transform .15s; }
+.equipment-group[open] > summary::before { transform: rotate(90deg); }
+.equipment-group[open] > summary { border-bottom: 1px solid var(--frost-line); background: var(--frost-soft); border-radius: 12px 12px 0 0; }
+.equipment-group .group-count { color: var(--ink-soft); font-weight: 700; }
+.equipment-group .group-value { margin-left: auto; }
+.equipment-group .table-wrap { border: 0; border-radius: 0 0 12px 12px; }
+.equipment-group .note-line { display: block; margin-top: 2px; white-space: normal; }
+.store-table { min-width: 0; }
+.store-table .quantity-cell { text-align: right; width: 140px; }
+.store-table td.quantity-cell strong { font-size: 1.15rem; }
+
+/* Zoznam členov na hromadné prihlásenie — na mobile jeden stĺpec, na širšom viac. */
+.pick-list { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); max-height: 320px; overflow-y: auto; }
+.pick-list label { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; cursor: pointer; }
+
+/* Našepkávač mien (výpožička v požičovni) */
+.combobox { position: relative; }
+.combobox-list {
+  position: absolute; z-index: 20; top: calc(100% - 6px); left: 0; right: 0;
+  margin: 0; padding: 4px; list-style: none; max-height: 260px; overflow-y: auto;
+  background: var(--surface); border: 1px solid var(--frost-line); border-radius: 10px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+}
+.combobox-list li { padding: 10px 12px; border-radius: 8px; cursor: pointer; }
+.combobox-list li[aria-selected="true"] { background: var(--frost); }

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ski Club IS — bez pripojenia</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #def3ed;
+        color: #17211e;
+        font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+        padding: 24px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #cde5dd;
+        border-radius: 18px;
+        padding: 32px;
+        max-width: 420px;
+        text-align: center;
+      }
+      img { width: 96px; height: 96px; object-fit: contain; }
+      h1 { font-size: 1.35rem; margin: 12px 0 8px; }
+      p { color: #5c7469; line-height: 1.5; margin: 0 0 18px; }
+      button {
+        border: 0; border-radius: 8px; padding: 11px 16px; cursor: pointer;
+        background: #1f5a49; color: #fff; font-weight: 700; font: inherit;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <img src="/icon-192.png" alt="Logo Ski Club IS" />
+      <h1>Nie si pripojená na internet</h1>
+      <p>
+        Ski Club IS pracuje so živými údajmi klubu, preto ich zámerne neukladá do telefónu.
+        Skontroluj pripojenie a skús to znova.
+      </p>
+      <button type="button" onclick="location.reload()">Skúsiť znova</button>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+# unrs-resolver je natívny resolver pre eslint-import-resolver-typescript.
+# Jeho inštalačný skript len vyberie správnu binárku pre platformu, preto ho povolíme.
+allowBuilds:
+  unrs-resolver: true
+
+# Next 15 si pripína postcss 8.4.31, ktorý má známe zraniteľnosti (source mapy, XSS
+# v stringify). Používa sa len pri builde nad našim CSS, ale 8.5.x je kompatibilný.
+overrides:
+  postcss: ^8.5.23

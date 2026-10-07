@@ -1,0 +1,16 @@
+node_modules
+.next
+.env*.local
+!.env.example
+*.tsbuildinfo
+
+# Tabuľky klubu (kontakty, platby, inventúra) obsahujú osobné údaje detí a rodičov.
+# Patria do ../tabuky/, mimo repozitára — toto je poistka, keby sa sem dostali.
+*.csv
+*.xls
+*.xlsx
+
+# Lokálne úložisko vývojového náhľadu — obsahuje rodné čísla a adresy detí.
+# Lomka na začiatku je dôležitá: bez nej by pravidlo platilo na každej úrovni
+# a vylúčilo by aj lib/data/, teda celú dátovú vrstvu appky.
+/data/
